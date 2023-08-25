@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Review, calculateCompositeScore } from '@/hooks/use-reviews';
 import { RATING_DIMENSIONS } from '@/constants/contracts';
 import { VoteButtons } from './vote-buttons';
@@ -65,8 +66,13 @@ export function ReviewCard({ review }: ReviewCardProps) {
       )}
 
       {/* Reviewer Info */}
-      <div className="mt-4 text-xs text-gray-500">
-        Reviewed by {review.reviewer.slice(0, 10)}...
+      <div className="mt-4">
+        <Link
+          href={`/profile/${review.reviewer}`}
+          className="text-xs text-gray-500 hover:text-blue-600 transition-colors"
+        >
+          Reviewed by {review.reviewer.slice(0, 10)}...
+        </Link>
       </div>
     </div>
   );

@@ -48,6 +48,10 @@ See `dapp_reviews/DEPLOYMENT.md` for complete deployment information and usage e
 ✅ 500 character review text limit
 ✅ Event emissions for indexing
 ✅ Weighted composite score calculation
+✅ Full-stack dApp with Next.js frontend
+✅ Wallet connection with Sui dApp Kit
+✅ Real-time review browsing
+✅ Interactive voting UI
 
 ## Project Status
 
@@ -56,11 +60,19 @@ See `dapp_reviews/DEPLOYMENT.md` for complete deployment information and usage e
 - All core functionality tested
 - Event system for frontend integration
 
-**Phase 2: Frontend** 🔜 Coming Next
+**Phase 2: Frontend** ✅ Complete
 - Next.js + React application
+- Sui dApp Kit integration
+- Review submission and browsing
+- Voting functionality
+- Responsive UI with Tailwind CSS
+
+**Phase 3: Enhancements** 🔜 Coming Next
 - zkLogin integration (Google OAuth)
-- Shadcn UI components
-- Integration with deployed contracts
+- Search and filtering
+- Package metadata display
+- User profiles
+- Analytics dashboard
 
 ## Tech Stack
 
@@ -69,35 +81,44 @@ See `dapp_reviews/DEPLOYMENT.md` for complete deployment information and usage e
 - Sui Framework
 - Deployed on Sui Devnet
 
-### Frontend (Planned)
+### Frontend
 - Next.js 15
 - React 19
 - TypeScript
-- Sui TypeScript SDK
-- Mysten dApp Kit
-- zkLogin for authentication
-- Shadcn UI
-- Tailwind CSS
+- Sui TypeScript SDK (@mysten/sui)
+- Mysten dApp Kit (@mysten/dapp-kit)
+- React Query
+- Tailwind CSS 4
 
 ## Getting Started
 
 ### Prerequisites
-- Sui CLI installed
-- Sui wallet with Devnet SUI tokens
+- Node.js 18+ or Bun
+- Sui Wallet browser extension
+- Devnet SUI tokens
 
-### Deploy Contracts
+### Run the Application
+
+```bash
+# Install dependencies
+bun install
+
+# Start development server
+bun dev
+```
+
+Visit [http://localhost:3000](http://localhost:3000) to use the app.
+
+See `FRONTEND.md` for detailed frontend documentation.
+
+### Deploy Smart Contracts (Already Deployed)
 
 ```bash
 cd dapp_reviews
 sui client publish --gas-budget 100000000
 ```
 
-### Test Contract Interaction
-
-See `dapp_reviews/DEPLOYMENT.md` for examples of:
-- Creating reviews
-- Voting on reviews
-- Querying review data
+See `dapp_reviews/DEPLOYMENT.md` for examples of direct CLI interaction.
 
 ## Smart Contract Details
 
@@ -129,14 +150,23 @@ Returned as `u64` (multiplied by 100), e.g., 425 = 4.25/5.00
 - ✅ Immutable review data integrity
 - ✅ Shared objects for concurrent access
 
+## Screenshots
+
+Visit the app at [http://localhost:3000](http://localhost:3000) to see:
+- **Home Page**: Landing page with feature overview
+- **Browse**: View all reviews with ratings and voting
+- **Submit Review**: Multi-dimensional rating form
+- **Wallet Integration**: Connect with Sui Wallet
+
 ## Next Steps
 
-1. Build frontend application with zkLogin
-2. Implement review browsing and search
-3. Add developer response feature
-4. Create analytics dashboard
-5. Deploy to Sui Testnet
-6. Mainnet deployment
+1. Add zkLogin integration (Google OAuth)
+2. Implement search and filtering by package ID
+3. Show dApp metadata from Sui Explorer
+4. Add user profile pages
+5. Create analytics dashboard
+6. Deploy to Sui Testnet
+7. Production deployment to Mainnet
 
 ## License
 

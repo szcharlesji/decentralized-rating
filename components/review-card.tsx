@@ -5,6 +5,7 @@ import { Review, calculateCompositeScore } from '@/hooks/use-reviews';
 import { RATING_DIMENSIONS } from '@/constants/contracts';
 import { VoteButtons } from './vote-buttons';
 import { getExplorerUrl, shortenAddress } from '@/lib/sui-explorer';
+import { usePackageMetadata } from '@/hooks/use-package-metadata';
 
 interface ReviewCardProps {
   review: Review;
@@ -13,6 +14,7 @@ interface ReviewCardProps {
 export function ReviewCard({ review }: ReviewCardProps) {
   const compositeScore = calculateCompositeScore(review);
   const date = new Date(parseInt(review.timestamp));
+  const { data: packageMetadata, isLoading: isLoadingMetadata } = usePackageMetadata(review.targetPackage);
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 p-6">
@@ -31,6 +33,37 @@ export function ReviewCard({ review }: ReviewCardProps) {
               </div>
             </div>
           </div>
+
+          {/* Package Metadata */}
+          <div className="mb-2">
+            {isLoadingMetadata ? (
+              <div className="text-sm text-gray-400">Loading package info...</div>
+            ) : packageMetadata?.hasMetadata ? (
+              <div>
+                <div className="text-sm font-semibold text-gray-900 mb-1">
+                  {packageMetadata.name}
+                </div>
+                {packageMetadata.modules && packageMetadata.modules.length > 0 && (
+                  <div className="flex flex-wrap gap-1 mb-1">
+                    {packageMetadata.modules.slice(0, 3).map((module) => (
+                      <span
+                        key={module}
+                        className="text-xs px-2 py-0.5 bg-blue-50 text-blue-700 rounded"
+                      >
+                        {module}
+                      </span>
+                    ))}
+                    {packageMetadata.modules.length > 3 && (
+                      <span className="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded">
+                        +{packageMetadata.modules.length - 3} more
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
+            ) : null}
+          </div>
+
           <div className="flex items-center gap-2">
             <span className="text-xs font-mono text-gray-500">
               Package: {shortenAddress(review.targetPackage, 8)}

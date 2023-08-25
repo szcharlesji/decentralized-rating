@@ -5,6 +5,7 @@ A blockchain-based review system for Sui dApps with multi-dimensional ratings an
 ## Overview
 
 This platform allows users to review Sui dApps (identified by package ID) with:
+
 - **Multi-dimensional ratings** (Security, Usability, Performance, Documentation, Innovation)
 - **Immutable reviews** - permanent on-chain records
 - **Community voting** - upvote/downvote system with vote changing
@@ -13,14 +14,17 @@ This platform allows users to review Sui dApps (identified by package ID) with:
 ## Architecture
 
 ### Smart Contracts (Move)
+
 Located in `dapp_reviews/`
 
 **Core Data Structures:**
+
 - `Review` - Immutable review object with 5-dimensional ratings
 - `ReviewRegistry` - Shared registry tracking all reviews
 - `VoteRecord` - Shared object preventing double voting
 
 **Key Functions:**
+
 - `create_review()` - Submit a new review
 - `upvote_review()` - Upvote a review
 - `downvote_review()` - Downvote a review
@@ -32,6 +36,7 @@ Located in `dapp_reviews/`
 **Network:** Sui Devnet
 
 **Package ID:**
+
 ```
 0x0af81f0ee8b71ebd70563826133b1ff85affdaa6b12c5674df8fe1968ba098b2
 ```
@@ -56,11 +61,13 @@ See `dapp_reviews/DEPLOYMENT.md` for complete deployment information and usage e
 ## Project Status
 
 **Phase 1: Smart Contracts** ✅ Complete
+
 - Move contracts implemented and deployed to Devnet
 - All core functionality tested
 - Event system for frontend integration
 
 **Phase 2: Frontend** ✅ Complete
+
 - Next.js + React application
 - Sui dApp Kit integration
 - Review submission and browsing
@@ -68,6 +75,7 @@ See `dapp_reviews/DEPLOYMENT.md` for complete deployment information and usage e
 - Responsive UI with Tailwind CSS
 
 **Phase 3: Enhancements** 🔜 Coming Next
+
 - zkLogin integration (Google OAuth)
 - Search and filtering
 - Package metadata display
@@ -77,11 +85,13 @@ See `dapp_reviews/DEPLOYMENT.md` for complete deployment information and usage e
 ## Tech Stack
 
 ### Smart Contracts
+
 - Sui Move
 - Sui Framework
 - Deployed on Sui Devnet
 
 ### Frontend
+
 - Next.js 15
 - React 19
 - TypeScript
@@ -93,6 +103,7 @@ See `dapp_reviews/DEPLOYMENT.md` for complete deployment information and usage e
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js 18+ or Bun
 - Sui Wallet browser extension
 - Devnet SUI tokens
@@ -125,6 +136,7 @@ See `dapp_reviews/DEPLOYMENT.md` for examples of direct CLI interaction.
 ### Rating Dimensions
 
 Each review includes ratings (1-5) for:
+
 1. **Security** (30% weight) - Smart contract safety, audits
 2. **Usability** (25% weight) - User experience, ease of use
 3. **Performance** (20% weight) - Transaction speed, responsiveness
@@ -134,6 +146,7 @@ Each review includes ratings (1-5) for:
 ### Composite Score
 
 Calculated as a weighted average:
+
 ```
 score = (security × 0.30) + (usability × 0.25) + (performance × 0.20) +
         (documentation × 0.15) + (innovation × 0.10)
@@ -153,6 +166,7 @@ Returned as `u64` (multiplied by 100), e.g., 425 = 4.25/5.00
 ## Screenshots
 
 Visit the app at [http://localhost:3000](http://localhost:3000) to see:
+
 - **Home Page**: Landing page with feature overview
 - **Browse**: View all reviews with ratings and voting
 - **Submit Review**: Multi-dimensional rating form

@@ -16,10 +16,16 @@ export function Header() {
             </Link>
             <nav className="hidden md:flex gap-6">
               <Link
-                href="/"
+                href="/browse"
                 className="text-gray-600 hover:text-gray-900 transition-colors"
               >
                 Browse
+              </Link>
+              <Link
+                href="/analytics"
+                className="text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                Analytics
               </Link>
               {account && (
                 <Link

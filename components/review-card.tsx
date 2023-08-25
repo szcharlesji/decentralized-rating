@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Review, calculateCompositeScore } from '@/hooks/use-reviews';
 import { RATING_DIMENSIONS } from '@/constants/contracts';
 import { VoteButtons } from './vote-buttons';
+import { getExplorerUrl, shortenAddress } from '@/lib/sui-explorer';
 
 interface ReviewCardProps {
   review: Review;
@@ -30,8 +31,18 @@ export function ReviewCard({ review }: ReviewCardProps) {
               </div>
             </div>
           </div>
-          <div className="text-xs font-mono text-gray-500 break-all">
-            Package: {review.targetPackage.slice(0, 20)}...
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-mono text-gray-500">
+              Package: {shortenAddress(review.targetPackage, 8)}
+            </span>
+            <a
+              href={getExplorerUrl(review.targetPackage, 'object')}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-blue-600 hover:text-blue-700"
+            >
+              View →
+            </a>
           </div>
         </div>
         <VoteButtons
@@ -71,7 +82,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
           href={`/profile/${review.reviewer}`}
           className="text-xs text-gray-500 hover:text-blue-600 transition-colors"
         >
-          Reviewed by {review.reviewer.slice(0, 10)}...
+          Reviewed by {shortenAddress(review.reviewer)}
         </Link>
       </div>
     </div>

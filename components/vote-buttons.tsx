@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useSignAndExecuteTransaction, useCurrentAccount } from '@mysten/dapp-kit';
 import { Transaction } from '@mysten/sui/transactions';
+import { toast } from 'sonner';
 import { CONTRACTS } from '@/constants/contracts';
 
 interface VoteButtonsProps {
@@ -20,7 +21,7 @@ export function VoteButtons({ reviewId, upvotes, downvotes }: VoteButtonsProps) 
 
   const handleVote = async (isUpvote: boolean) => {
     if (!account) {
-      alert('Please connect your wallet to vote');
+      toast.error('Please connect your wallet to vote');
       return;
     }
 
@@ -55,14 +56,14 @@ export function VoteButtons({ reviewId, upvotes, downvotes }: VoteButtonsProps) 
           },
           onError: (err) => {
             console.error('Error voting:', err);
-            alert(err.message || 'Failed to vote');
+            toast.error(err.message || 'Failed to vote');
             setIsVoting(false);
           },
         }
       );
     } catch (err: any) {
       console.error('Error:', err);
-      alert(err.message || 'Failed to vote');
+      toast.error(err.message || 'Failed to vote');
       setIsVoting(false);
     }
   };

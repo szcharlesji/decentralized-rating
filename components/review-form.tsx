@@ -1,15 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import { useSignAndExecuteTransaction, useSuiClient } from '@mysten/dapp-kit';
+import { useSignAndExecuteTransaction } from '@mysten/dapp-kit';
 import { Transaction } from '@mysten/sui/transactions';
+import { isValidSuiAddress, normalizeSuiAddress } from '@mysten/sui/utils';
 import { toast } from 'sonner';
-import { CONTRACTS, RATING_DIMENSIONS, MAX_REVIEW_LENGTH } from '@/constants/contracts';
+import { CONTRACTS, RATING_DIMENSIONS } from '@/constants/contracts';
 import { useRouter } from 'next/navigation';
 
 export function ReviewForm() {
   const router = useRouter();
-  const client = useSuiClient();
   const { mutate: signAndExecute } = useSignAndExecuteTransaction();
 
   const [packageId, setPackageId] = useState('');
@@ -20,7 +20,6 @@ export function ReviewForm() {
     documentation: 3,
     innovation: 3,
   });
-  const [reviewText, setReviewText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -34,14 +33,16 @@ export function ReviewForm() {
     setIsSubmitting(true);
 
     try {
+      const trimmedPackageId = packageId.trim();
+
       // Validate package ID
-      if (!packageId || packageId.length < 10) {
+      if (!trimmedPackageId || trimmedPackageId.length < 10) {
         throw new Error('Please enter a valid package ID');
       }
 
-      // Validate review text
-      if (reviewText.length > MAX_REVIEW_LENGTH) {
-        throw new Error(`Review must be ${MAX_REVIEW_LENGTH} characters or less`);
+      const normalizedPackageId = normalizeSuiAddress(trimmedPackageId);
+      if (!isValidSuiAddress(normalizedPackageId)) {
+        throw new Error('Package ID must be a valid Sui address (0x...)');
       }
 
       const tx = new Transaction();
@@ -50,13 +51,12 @@ export function ReviewForm() {
         target: `${CONTRACTS.PACKAGE_ID}::dapp_reviews::create_review`,
         arguments: [
           tx.object(CONTRACTS.REVIEW_REGISTRY),
-          tx.pure.address(packageId),
+          tx.pure.address(normalizedPackageId),
           tx.pure.u8(ratings.security),
           tx.pure.u8(ratings.usability),
           tx.pure.u8(ratings.performance),
           tx.pure.u8(ratings.documentation),
           tx.pure.u8(ratings.innovation),
-          tx.pure.string(reviewText),
           tx.object('0x6'), // Clock object
         ],
       });
@@ -136,25 +136,6 @@ export function ReviewForm() {
               </div>
             ))}
           </div>
-        </div>
-
-        {/* Review Text */}
-        <div>
-          <label htmlFor="reviewText" className="block text-sm font-medium text-gray-700 mb-2">
-            Your Review
-          </label>
-          <textarea
-            id="reviewText"
-            value={reviewText}
-            onChange={(e) => setReviewText(e.target.value)}
-            placeholder="Share your experience with this dApp..."
-            rows={6}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-            maxLength={MAX_REVIEW_LENGTH}
-          />
-          <p className="mt-1 text-xs text-gray-500">
-            {reviewText.length} / {MAX_REVIEW_LENGTH} characters
-          </p>
         </div>
 
         {/* Warning */}

@@ -1,18 +1,15 @@
 module dapp_reviews::dapp_reviews;
 
 use sui::table::{Self, Table};
-use std::string::String;
 use sui::event;
 
 // ===== Error Codes =====
-const EReviewTooLong: u64 = 0;
-const EInvalidRating: u64 = 1;
-const EAlreadyReviewed: u64 = 2;
-const EAlreadyVoted: u64 = 3;
-const ENotVoted: u64 = 4;
+const EInvalidRating: u64 = 0;
+const EAlreadyReviewed: u64 = 1;
+const EAlreadyVoted: u64 = 2;
+const ENotVoted: u64 = 3;
 
 // ===== Constants =====
-const MAX_REVIEW_LENGTH: u64 = 500;
 const MIN_RATING: u8 = 1;
 const MAX_RATING: u8 = 5;
 
@@ -30,7 +27,6 @@ public struct Review has key, store {
     rating_performance: u8,
     rating_documentation: u8,
     rating_innovation: u8,
-    review_text: String,
     upvotes: u64,
     downvotes: u64,
 }
@@ -105,7 +101,6 @@ public entry fun create_review(
     rating_performance: u8,
     rating_documentation: u8,
     rating_innovation: u8,
-    review_text: String,
     clock: &sui::clock::Clock,
     ctx: &mut TxContext
 ) {
@@ -117,9 +112,6 @@ public entry fun create_review(
     assert!(rating_performance >= MIN_RATING && rating_performance <= MAX_RATING, EInvalidRating);
     assert!(rating_documentation >= MIN_RATING && rating_documentation <= MAX_RATING, EInvalidRating);
     assert!(rating_innovation >= MIN_RATING && rating_innovation <= MAX_RATING, EInvalidRating);
-
-    // Validate review text length
-    assert!(review_text.length() <= MAX_REVIEW_LENGTH, EReviewTooLong);
 
     // Check if user has already reviewed this package
     if (table::contains(&registry.reviews_by_user, reviewer)) {
@@ -141,7 +133,6 @@ public entry fun create_review(
         rating_performance,
         rating_documentation,
         rating_innovation,
-        review_text,
         upvotes: 0,
         downvotes: 0,
     };
@@ -329,10 +320,6 @@ public fun get_review_ratings(review: &Review): (u8, u8, u8, u8, u8) {
         review.rating_documentation,
         review.rating_innovation
     )
-}
-
-public fun get_review_text(review: &Review): String {
-    review.review_text
 }
 
 public fun get_review_votes(review: &Review): (u64, u64) {

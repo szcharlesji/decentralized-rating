@@ -16,6 +16,5 @@ export const RATING_DIMENSIONS = [
   { key: 'innovation', label: 'Innovation', weight: 0.1 },
 ] as const;
 
-export const MAX_REVIEW_LENGTH = 500;
 export const MIN_RATING = 1;
 export const MAX_RATING = 5;

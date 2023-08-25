@@ -100,15 +100,6 @@ export function ReviewCard({ review }: ReviewCardProps) {
         })}
       </div>
 
-      {/* Review Text */}
-      {review.reviewText && (
-        <div className="border-t border-gray-200 pt-4">
-          <p className="text-gray-700 text-sm whitespace-pre-wrap">
-            {review.reviewText}
-          </p>
-        </div>
-      )}
-
       {/* Reviewer Info */}
       <div className="mt-4">
         <Link

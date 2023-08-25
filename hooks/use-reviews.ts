@@ -12,7 +12,6 @@ export interface Review {
   ratingPerformance: number;
   ratingDocumentation: number;
   ratingInnovation: number;
-  reviewText: string;
   upvotes: string;
   downvotes: string;
 }
@@ -68,7 +67,6 @@ export function useReviews() {
               ratingPerformance: fields.rating_performance,
               ratingDocumentation: fields.rating_documentation,
               ratingInnovation: fields.rating_innovation,
-              reviewText: fields.review_text,
               upvotes: fields.upvotes,
               downvotes: fields.downvotes,
             });

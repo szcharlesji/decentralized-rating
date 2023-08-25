@@ -24,11 +24,28 @@ export function useReviews() {
     queryKey: ['reviews'],
     queryFn: async () => {
       try {
-        // Query all Review objects owned by users
-        const { data } = await client.getOwnedObjects({
-          filter: {
-            StructType: `${CONTRACTS.PACKAGE_ID}::dapp_reviews::Review`,
+        const eventType = `${CONTRACTS.PACKAGE_ID}::dapp_reviews::ReviewCreated`;
+        const events = await client.queryEvents({
+          query: {
+            MoveEventType: eventType,
           },
+          order: 'descending',
+          limit: 100,
+        });
+
+        const reviewIds = events.data
+          .map((event) => {
+            const parsed = event.parsedJson as { review_id?: string } | null;
+            return parsed?.review_id;
+          })
+          .filter((id): id is string => typeof id === 'string');
+
+        if (reviewIds.length === 0) {
+          return [];
+        }
+
+        const objects = await client.multiGetObjects({
+          ids: reviewIds,
           options: {
             showContent: true,
             showType: true,
@@ -37,11 +54,12 @@ export function useReviews() {
 
         const reviews: Review[] = [];
 
-        for (const obj of data) {
-          if (obj.data?.content?.dataType === 'moveObject') {
-            const fields = obj.data.content.fields as any;
+        for (const obj of objects) {
+          const data = obj.data;
+          if (data?.content?.dataType === 'moveObject') {
+            const fields = data.content.fields as any;
             reviews.push({
-              id: obj.data.objectId,
+              id: data.objectId,
               targetPackage: fields.target_package,
               reviewer: fields.reviewer,
               timestamp: fields.timestamp,
@@ -57,7 +75,6 @@ export function useReviews() {
           }
         }
 
-        // Sort by timestamp (newest first)
         reviews.sort((a, b) => parseInt(b.timestamp) - parseInt(a.timestamp));
 
         return reviews;

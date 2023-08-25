@@ -1,4 +1,6 @@
-export const NETWORK = 'devnet';
+export type SuiNetwork = 'mainnet' | 'testnet' | 'devnet' | 'localnet';
+
+export const NETWORK: SuiNetwork = 'devnet';
 
 export const CONTRACTS = {
   PACKAGE_ID: '0x0af81f0ee8b71ebd70563826133b1ff85affdaa6b12c5674df8fe1968ba098b2',

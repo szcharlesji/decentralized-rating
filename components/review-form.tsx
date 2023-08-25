@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useSignAndExecuteTransaction, useSuiClient } from '@mysten/dapp-kit';
 import { Transaction } from '@mysten/sui/transactions';
+import { toast } from 'sonner';
 import { CONTRACTS, RATING_DIMENSIONS, MAX_REVIEW_LENGTH } from '@/constants/contracts';
 import { useRouter } from 'next/navigation';
 
@@ -67,12 +68,12 @@ export function ReviewForm() {
         {
           onSuccess: (result) => {
             console.log('Review submitted:', result);
-            alert('Review submitted successfully!');
+            toast.success('Review submitted successfully!');
             router.push('/browse');
           },
           onError: (err) => {
             console.error('Error submitting review:', err);
-            setError(err.message || 'Failed to submit review');
+            toast.error(err.message || 'Failed to submit review');
             setIsSubmitting(false);
           },
         }
